@@ -1,0 +1,38 @@
+﻿<local:UserControlMessageBase x:Class="Chat.UserControlMessageSend"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                        xmlns:local="clr-namespace:Chat"
+                        xmlns:chat="clr-namespace:Chat"
+                        mc:Ignorable="d" >
+
+    <Border CornerRadius="30 30 30 0" Background="{StaticResource PrimaryHueMidBrush}" MinWidth="300" MaxWidth="800" HorizontalAlignment="Left" >
+        <Grid >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="128"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox AcceptsReturn="False" AcceptsTab="False" Grid.Column="0" Name="NameBox" Margin="15  5" Text="Debilov Debil Debilovich" Foreground="Blue" FontSize="20" TextAlignment="Left" TextWrapping="NoWrap" VerticalContentAlignment="Center"  IsReadOnly="True"/>
+                    <TextBox AcceptsReturn="False" AcceptsTab="False" Grid.Column="1" Name="TimeBox" Text="12:45 yesterday" FontSize="15" Margin="10 5" Foreground="MediumBlue" TextAlignment="Center" VerticalContentAlignment="Center"  IsReadOnly="True"/>
+
+                </Grid>
+            </StackPanel>
+
+            <Border Grid.Row="1"  Margin="10 12">
+                <TextBox AcceptsReturn="False" AcceptsTab="False" Name="TextBox" Margin="15" TextWrapping="Wrap" Text="Template" FontSize="20" Foreground="White" IsReadOnly="True"/>
+            </Border>
+
+        </Grid>
+    </Border>
+</local:UserControlMessageBase>
