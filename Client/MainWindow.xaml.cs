@@ -41,32 +41,46 @@ namespace Chat
             var message = SendTextBox.Text;
 
             var userMessage = new UserMessage();
+
             userMessage.Type = PacketType.UserMessage;
             userMessage.Name = userName;
             userMessage.Message = message;
 
-            ShowMessage(userMessage);
+            ShowMessage(userMessage, true);
 
             m_Client.SendMessage(userMessage);
         }
 
         private void ShowMessage(IMessage message)
         {
+            ShowMessage(message, false);
+        }
+
+        private void ShowMessage(IMessage message, bool self)
+        {
             var userName = (message is UserMessage user) ? user.Name : "System";
 
-            ShowMessage(message.Message, userName, DateTime.Now, false);
+            ShowMessage(message.Message, userName, DateTime.Now, self);
         }
 
         private void ShowMessage(string message, string userName, DateTime time, bool self)
         {
-            UserControlMessageBase newMessage = self ? new UserControlMessageSend() : new UserControlMessageReceive();
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                UserControlMessageBase newMessage;
 
-            newMessage.UserName = userName;
-            newMessage.Time = time.ToString("HH:mm MMM");
-            newMessage.Text = message;
-            newMessage.Padding = new Thickness(0, 5, 0, 5);
+                if (self)
+                    newMessage = new UserControlMessageSend();
+                else
+                    newMessage = new UserControlMessageReceive();
 
-            Dispatcher.BeginInvoke(new ThreadStart(() => Messages.Children.Add(newMessage)));
+                newMessage.UserName = userName;
+                newMessage.Time = time.ToString("HH:mm MMM");
+                newMessage.Text = message;
+                newMessage.Padding = new Thickness(0, 5, 0, 5);
+
+                Messages.Children.Add(newMessage);
+            }));
         }
     }
 }

@@ -60,7 +60,7 @@ namespace ServerClientLibrary
                 {
                     Console.WriteLine(ex.Message);
                     throw;
-                }
+                } 
             }
             private void SendDataAsync(IAsyncResult ar)
             {
