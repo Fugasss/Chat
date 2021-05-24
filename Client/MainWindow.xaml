@@ -44,9 +44,9 @@
                     <StackPanel Orientation="Vertical" Height="Auto">
                         <!--Chat-->
                         <StackPanel Name="Messages" VerticalAlignment="Center" HorizontalAlignment="Stretch" CanVerticallyScroll="True" >
-                            <local:UserControlMessageReceive Padding="0 5" />
-                            <local:UserControlMessageSend Padding="0 5"/>
-                            <local:UserControlMessageSend Padding="0 5"/>
+                            <!--<local:UserControlMessageReceive Padding="0 5" />-->
+                            <!--<local:UserControlMessageSend Padding="0 5"/>-->
+                            <!--<local:UserControlMessageSend Padding="0 5"/>-->
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

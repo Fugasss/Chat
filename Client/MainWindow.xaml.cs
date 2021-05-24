@@ -21,29 +21,29 @@ namespace Chat
 {
     public partial class MainWindow : Window
     {
-        private const int Port = 80;
-        private const string Ip = "127.0.0.1";
 
         private readonly Client m_Client;
+        private readonly string m_UserName;
 
-        public MainWindow()
+        public MainWindow(string ip, int port,string username)
         {
             InitializeComponent();
 
-            m_Client = new Client(Ip, Port);
+            m_UserName = username;
+            m_Client = new Client(ip, port);
+
             Client.OnMessageReceive += ShowMessage;
         }
 
+
         private void SendMessageButtonClick(object sender, RoutedEventArgs e)
         {
-            const string userName = "You";
-
             var message = SendTextBox.Text;
 
             var userMessage = new UserMessage();
 
             userMessage.Type = PacketType.UserMessage;
-            userMessage.Name = userName;
+            userMessage.Name = m_UserName;
             userMessage.Message = message;
 
             ShowMessage(userMessage, true);
