@@ -9,6 +9,7 @@
         Title="" Height="720" Width="1280" ResizeMode="NoResize" WindowStartupLocation="Manual" WindowStyle="ToolWindow">
 
     <Grid Background="DarkSlateGray">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280" />
             <ColumnDefinition Width="*" />
@@ -17,21 +18,24 @@
         <Grid Grid.Column="1" />
 
         <StackPanel Grid.Column="0" Background="{StaticResource PrimaryHueDarkBrush}">
+            
             <StackPanel Orientation="Horizontal" Background="White">
                 <Image Width="200" Height="100" Source="Assets/logo.png"/>
                 <Button Style="{StaticResource MaterialDesignFlatButton}" Height="64">
                     <materialDesign:PackIcon Kind="PlusCircle" Width="32" Height="32" />
                 </Button>
             </StackPanel>
+
             <StackPanel Orientation="Vertical">
                 <ListView>
                     <ListViewItem>
                         <Label Foreground="{StaticResource PrimaryHueDarkForegroundBrush}">Debil Debilovich Debilov</Label>
                     </ListViewItem>
                 </ListView>
-
             </StackPanel>
+
         </StackPanel>
+
         <Grid Grid.Column="1">
             <Grid>
 
@@ -50,18 +54,24 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
+
                 <Border  Height="64" Grid.Row="1" VerticalAlignment="Bottom" Background="{StaticResource PrimaryHueMidBrush}">
                     <Grid>
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="64"/>
                         </Grid.ColumnDefinitions>
+
                         <TextBox Name="SendTextBox" Background="{StaticResource PrimaryHueLightBrush}" Grid.Column="0" MaxHeight="48" TextWrapping="Wrap" Margin="5" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                        
                         <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Click="SendMessageButtonClick">
                             <materialDesign:PackIcon Kind="Send"/>
                         </Button>
+
                     </Grid>
                 </Border>
+
             </Grid>
         </Grid>
     </Grid>

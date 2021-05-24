@@ -8,44 +8,27 @@
         mc:Ignorable="d"
         Title="Connect" Height="700" Width="600" ResizeMode="NoResize" ShowInTaskbar="False">
 
-    <Window.Resources>
-        <Style x:Key="InputText">
-            <Setter Property="Control.FontSize" Value="28"/>
-            <Setter Property="Control.FontFamily" Value="Verdana"/>
-            <Setter Property="Control.Margin" Value="5 10"/>
-            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Control.Background" Value="{StaticResource PrimaryHueMidBrush}"/>
-            <Setter Property="Control.Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}"/>
-        </Style>
-        <Style x:Key="InputLabelText">
-            <Setter Property="Control.FontSize" Value="32"/>
-            <Setter Property="Control.FontFamily" Value="Verdana"/>
-            <Setter Property="Control.Margin" Value="0 10 0 10"/>
-            <Setter Property="Control.HorizontalContentAlignment" Value="Right"/>
-            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Control.Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}"></Setter>
-        </Style>
-    </Window.Resources>
-
     <Grid Background="{StaticResource PrimaryHueLightBrush}">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="256"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="168"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Style="{StaticResource CenterAlignment}">
             <Image Source="Assets/logo.png"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Vertical">
             <Grid>
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
@@ -63,12 +46,14 @@
             </Grid>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Row="2" Orientation="Vertical" Style="{StaticResource CenterAlignment}">
+            
             <Button Click="TryConnectOnClick" Style="{StaticResource MaterialDesignFlatButton}" Width="216" Height="118" >
-                <materialDesign:PackIcon Kind="ArrowRightBoldCircle"  Width="128" Height="128" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <materialDesign:PackIcon Kind="ArrowRightBoldCircle"  Width="128" Height="128" Style="{StaticResource CenterAlignment}"/>
             </Button>
-            <Label Name="ErrorLabel" Visibility="Hidden" Content="Can't connect to Server" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28"/>
+            <Label Name="ErrorLabel" Visibility="Hidden" Content="Can't connect to Server" Foreground="DarkRed" Style="{StaticResource CenterAlignment}" FontSize="28"/>
 
         </StackPanel>
+
     </Grid>
 </Window>
