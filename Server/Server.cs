@@ -1,6 +1,7 @@
 ﻿using ServerClientLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using Server.TcpWrapper;
@@ -8,12 +9,12 @@ using ServerClientLibrary.Packets;
 
 namespace Server
 {
-    class Server
+    internal class Server
     {
-        private readonly Dictionary<int, Client> m_Clients;
         private readonly TcpListener m_Listener;
         private int m_LastId = 0;
 
+        public static Dictionary<int, Client> Clients { get; private set; }
         public int Port { get; }
 
         public Server(int port)
@@ -22,7 +23,7 @@ namespace Server
 
             m_Listener = new TcpListener(IPAddress.Any, Port);
 
-            m_Clients = new Dictionary<int, Client>();
+            Clients = new Dictionary<int, Client>();
         }
 
         public void Start()
@@ -45,25 +46,49 @@ namespace Server
 
         public static void Log(string message) =>
             Console.WriteLine(message);
-        private void Log(UserMessage message, int clientId)
+
+        private static void Log(IMessage message, int clientId)
         {
-            m_Clients.TryGetValue(clientId, out var clientName);
-
-            Console.WriteLine("{0} {1}", message.Name, message.Message);
-            if (clientId == -1) return;
-
-            var name = "User";
-            if (m_Clients.TryGetValue(clientId, out var currentClient))
-                name = currentClient.Name;
-
-            message.Name = name;
-
-            for (var i = 0; i < m_Clients.Count; i++)
+            switch (message)
             {
-                if (!m_Clients.TryGetValue(i, out var client)) continue;
-                if (client.Id == clientId) continue;
+                case UserMessage userMessage:
+                    Log($"{userMessage.Name} {userMessage.Message}");
+                    break;
+                case WelcomeMessage welcomeMessage:
+                    Log($"{welcomeMessage.UserName} connected: {welcomeMessage.Message}");
+                    SendListOfUsers(clientId);
+                    break;
+            }
 
-                client.Tcp.SendPacket(message);
+            if (clientId == -1 || Clients.Count <= 1) return;
+
+            SendForAllUsers(message, clientId);
+        }
+
+        private static void SendForAllUsers(IPacket packet, int senderId)
+        {
+            for (var i = 0; i < Clients.Count; i++)
+            {
+                if (Clients.TryGetValue(i, out var client) == false) continue;
+                if (client.Id == senderId) continue;
+                if (client.Tcp.Socket.Connected == false) continue;
+
+                client.Tcp.SendPacket(packet);
+            }
+        }
+
+        private static void SendListOfUsers(int senderId)
+        {
+            if (!Clients.TryGetValue(senderId, out var client)) return;
+
+            foreach (var user in Clients.Values.Where(user => user != null && user.Id != senderId))
+            {
+                var packet = user.WelcomeMessage;
+
+                if (string.IsNullOrEmpty(packet.UserName))
+                    packet.UserName = user.Name;
+
+                client.Tcp.SendPacket(packet);
             }
         }
 
@@ -76,7 +101,7 @@ namespace Server
 
                 var client = new Client(m_LastId, tcp);
 
-                m_Clients.Add(m_LastId, client);
+                Clients.Add(m_LastId, client);
                 m_LastId++;
 
                 m_Listener.BeginAcceptTcpClient(AcceptClientAsync, null);
@@ -84,6 +109,7 @@ namespace Server
             catch (SocketException ex)
             {
                 Console.WriteLine(ex.Message);
+                throw;
             }
         }
     }

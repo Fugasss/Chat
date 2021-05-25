@@ -1,13 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Server
 {
-    class Program
+    internal class Program
     {
         //TODO: send welcome packet from client with name
-        static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+        private static void Main(string[] args)
+        {
+            var width = Console.WindowWidth;
+            var height = Console.WindowHeight;
 
-        async Task MainAsync()
+            Console.SetWindowSize(width / 2, height);
+
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+
+            new Program().MainAsync().GetAwaiter().GetResult();
+        }
+
+        private async Task MainAsync()
         {
             var server = new Server(80);
             server.Start();

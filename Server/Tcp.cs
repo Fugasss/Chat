@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using ServerClientLibrary;
 using ServerClientLibrary.Packets;
@@ -7,13 +8,11 @@ namespace Server.TcpWrapper
 {
     public class Tcp : ClientBase.TcpBase
     {
-        public readonly Client Client;
         public readonly int Id;
 
-        internal Tcp(Client client, TcpClient tcpClient) : base(tcpClient)
+        internal Tcp(int id, TcpClient tcpClient) : base(tcpClient)
         {
-            Client = client;
-            Id = client.Id;
+            Id = id;
         }
 
         protected override void HandleReceivedData(byte[] data)
@@ -24,8 +23,8 @@ namespace Server.TcpWrapper
 
             IMessage message = type switch
             {
-                PacketType.Welcome => new WelcomeMessage(),
-                PacketType.UserMessage => new UserMessage(),
+                PacketType.Welcome => WelcomeMessage.CreateInstance(),
+                PacketType.UserMessage => UserMessage.CreateInstance(),
                 PacketType.ServerMessage => throw new Exception("Client can't send server packets!"),
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -35,7 +34,8 @@ namespace Server.TcpWrapper
             switch (message)
             {
                 case WelcomeMessage welcome:
-                    Client.Name = welcome.UserName;
+                    Client.SetName(Id, welcome);
+                    Client.MessageReceive(Id, welcome);
                     break;
                 case UserMessage userMessage:
                     Client.MessageReceive(Id, userMessage);

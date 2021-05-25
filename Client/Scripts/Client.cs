@@ -14,13 +14,22 @@ namespace Chat.Scripts
 
         public readonly string Ip;
         public readonly int Port;
+        public readonly string UserName;
 
-        public Client(string ip, int port)
+        public Client(string ip, int port, string username)
         {
             Ip = ip;
             Port = port;
+            UserName = username;
 
             Tcp = new Tcp(Ip, Port);
+
+            var welcome = WelcomeMessage.CreateInstance();
+
+            welcome.UserName = username;
+            welcome.Message = string.Empty;
+
+            Tcp.SendPacket(welcome);
         }
 
         public void SendMessage(UserMessage message)
@@ -30,32 +39,17 @@ namespace Chat.Scripts
 
         public static void MessageReceived(IMessage message) => OnMessageReceive?.Invoke(message);
 
-        public static  bool ServerAvailable(string ip,int port)
+        public static bool ServerAvailable(string ip, int port)
         {
-            using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            try
-            {
-                socket.Connect(ip, port);
-            }
-            catch (SocketException)
-            {
+            if (string.IsNullOrEmpty(ip) || string.IsNullOrWhiteSpace(ip) || IPAddress.TryParse(ip, out var iPAddress) == false)
                 return false;
-            }
-            finally
-            {
-                socket.Dispose();
-            }
 
-            return true;
+            const int timeout = 150;
 
-            //if (string.IsNullOrEmpty(ip) || string.IsNullOrWhiteSpace(ip) || IPAddress.TryParse(ip, out _) == false)
-            //    return IPStatus.BadDestination;
+            var ping = new Ping();
+            var reply = ping.Send(iPAddress, timeout);
 
-            //var ping = new Ping();
-            //var reply = await ping.SendPingAsync(ip);
-
-            //return reply?.Status ?? IPStatus.BadDestination;
+            return reply != null && reply.Status == IPStatus.Success;
         }
     }
 }

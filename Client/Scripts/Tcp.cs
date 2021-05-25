@@ -15,9 +15,9 @@ namespace Chat.Scripts
 
             IMessage message = type switch
             {
-                PacketType.Welcome => new WelcomeMessage(),
-                PacketType.UserMessage => new UserMessage(),
-                PacketType.ServerMessage => new ServerMessage(),
+                PacketType.Welcome => WelcomeMessage.CreateInstance(),
+                PacketType.UserMessage => UserMessage.CreateInstance(),
+                PacketType.ServerMessage => ServerMessage.CreateInstance(),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

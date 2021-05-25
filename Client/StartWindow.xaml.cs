@@ -39,11 +39,11 @@ namespace Chat
         }
 
         private void TryConnectOnClick(object sender, RoutedEventArgs e)
-        {
-            var port = int.Parse(PortBox.Text);
+        {   
             var ip = IpBox.Text;
+            var correctPort = int.TryParse(PortBox.Text, out var port);
 
-            var available = Client.ServerAvailable(ip, port);
+            var available = Client.ServerAvailable(ip, port) && correctPort;
 
             if (available)
             {

@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using Chat.CustomControls;
 using Chat.Scripts;
 using ServerClientLibrary.Packets;
 
@@ -25,14 +13,14 @@ namespace Chat
         private readonly Client m_Client;
         private readonly string m_UserName;
 
-        public MainWindow(string ip, int port,string username)
+        public MainWindow(string ip, int port, string username)
         {
             InitializeComponent();
 
             m_UserName = username;
-            m_Client = new Client(ip, port);
+            m_Client = new Client(ip, port, username);
 
-            Client.OnMessageReceive += ShowMessage;
+            Client.OnMessageReceive += HandleMessage;
         }
 
 
@@ -40,7 +28,7 @@ namespace Chat
         {
             var message = SendTextBox.Text;
 
-            var userMessage = new UserMessage();
+            var userMessage = UserMessage.CreateInstance();
 
             userMessage.Type = PacketType.UserMessage;
             userMessage.Name = m_UserName;
@@ -51,9 +39,18 @@ namespace Chat
             m_Client.SendMessage(userMessage);
         }
 
-        private void ShowMessage(IMessage message)
+        private void HandleMessage(IMessage message)
         {
-            ShowMessage(message, false);
+            switch (message)
+            {
+                case UserMessage or ServerMessage:
+                    ShowMessage(message, false);
+                    break;
+
+                case WelcomeMessage:
+                    AddUserToList(message);
+                    break;
+            }
         }
 
         private void ShowMessage(IMessage message, bool self)
@@ -62,7 +59,6 @@ namespace Chat
 
             ShowMessage(message.Message, userName, DateTime.Now, self);
         }
-
         private void ShowMessage(string message, string userName, DateTime time, bool self)
         {
             Dispatcher.BeginInvoke(new ThreadStart(() =>
@@ -80,6 +76,18 @@ namespace Chat
                 newMessage.Padding = new Thickness(0, 5, 0, 5);
 
                 Messages.Children.Add(newMessage);
+            }));
+        }
+
+        private void AddUserToList(IMessage message)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                var newUser = new UserNameListItem();
+
+                newUser.Content = ((WelcomeMessage)message).UserName;
+
+                UsersList.Items.Add(newUser);
             }));
         }
     }

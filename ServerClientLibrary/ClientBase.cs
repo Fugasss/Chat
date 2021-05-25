@@ -39,6 +39,8 @@ namespace ServerClientLibrary
             }
             public void SendPacket(IPacket data) =>
                 SendPacket(data.GetPacket().ToArray());
+            public void SendPacket(IMessage message) =>
+                SendPacket(message.GetPacket().ToArray());
 
             private void ReceiveDataAsync(IAsyncResult ar)
             {
@@ -60,7 +62,7 @@ namespace ServerClientLibrary
                 {
                     Console.WriteLine(ex.Message);
                     throw;
-                } 
+                }
             }
             private void SendDataAsync(IAsyncResult ar)
             {

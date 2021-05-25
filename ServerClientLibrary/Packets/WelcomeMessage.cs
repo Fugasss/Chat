@@ -2,6 +2,17 @@
 {
     public struct WelcomeMessage : IMessage
     {
+        public static WelcomeMessage CreateInstance()
+        {
+            var newMessage = new WelcomeMessage();
+
+            newMessage.Type = PacketType.Welcome;
+            newMessage.Message = string.Empty;
+            newMessage.UserName = string.Empty;
+
+            return newMessage;
+        }
+
         public PacketType Type { get; set; }
         public string UserName { get; set; }
         public string Message { get; set; }

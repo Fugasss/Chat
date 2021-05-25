@@ -70,17 +70,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\UserNameListItem.xaml.cs">
+      <DependentUpon>UserNameListItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scripts\Tcp.cs" />
     <Compile Include="StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControlMessageBase.cs" />
-    <Compile Include="UserControlMessageReceive.xaml.cs">
+    <Compile Include="CustomControls\UserControlMessageBase.cs" />
+    <Compile Include="CustomControls\UserControlMessageReceive.xaml.cs">
       <DependentUpon>UserControlMessageReceive.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControlMessageSend.xaml.cs">
+    <Compile Include="CustomControls\UserControlMessageSend.xaml.cs">
       <DependentUpon>UserControlMessageSend.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomControls\UserNameListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -102,11 +109,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControlMessageReceive.xaml">
+    <Page Include="CustomControls\UserControlMessageReceive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControlMessageSend.xaml">
+    <Page Include="CustomControls\UserControlMessageSend.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,6 +157,7 @@
   <ItemGroup>
     <Resource Include="Assets\logo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
